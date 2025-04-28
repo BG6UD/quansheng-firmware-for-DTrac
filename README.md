@@ -39,7 +39,7 @@ Anyway, have fun.
    * more frequency steps
    * squelch more sensitive
 * fagci spectrum analyzer (**F+5** to turn on)
-* some other mods introduced by egzumer:
+* many of egzumer mods:
    * SSB demodulation (adopted from fagci)
    * backlight dimming
    * battery voltage calibration from menu
@@ -52,7 +52,7 @@ Anyway, have fun.
    * reordered and renamed menu entries
    * LCD interference crash fix
    * many others...
-* some other mods introduced by me:
+* Some modifications by me:
    * The DTrac app connects to a radio station via Bluetooth and controls its Doppler frequency, mainly used for amateur satellite communication
    * many others...
 
