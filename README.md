@@ -1,6 +1,5 @@
-# Modified firmware forked from https://github.com/egzumer/uv-k5-firmware-custom
-
-# Open re-implementation of the Quansheng UV-K5/K6/5R v2.1.27 firmware
+# Modified firmware forked from https://github.com/egzumer/uv-k5-firmware-custom  
+Open re-implementation of the Quansheng UV-K5/K6/5R v2.1.27 firmware
 
 This repository is a merge of [OneOfEleven custom firmware](https://github.com/OneOfEleven/uv-k5-firmware-custom) with [fagci spectrum analizer](https://github.com/fagci/uv-k5-firmware-fagci-mod/tree/refactor) plus my few changes.<br>
 All is a cloned and customized version of DualTachyon's open firmware found [here](https://github.com/DualTachyon/uv-k5-firmware) ... a cool achievement !
@@ -20,8 +19,6 @@ Anyway, have fun.
 * [User Customization](#user-customization)
 * [Compiler](#compiler)
 * [Building](#building)
-* [Credits](#credits)
-* [Other sources of information](#other-sources-of-information)
 * [License](#license)
 * [Example changes/updates](#example-changesupdates)
 
@@ -42,7 +39,7 @@ Anyway, have fun.
    * more frequency steps
    * squelch more sensitive
 * fagci spectrum analyzer (**F+5** to turn on)
-* some other mods introduced by me:
+* some other mods introduced by egzumer:
    * SSB demodulation (adopted from fagci)
    * backlight dimming
    * battery voltage calibration from menu
@@ -55,10 +52,13 @@ Anyway, have fun.
    * reordered and renamed menu entries
    * LCD interference crash fix
    * many others...
+* some other mods introduced by me:
+   * The DTrac app connects to a radio station via Bluetooth and controls its Doppler frequency, mainly used for amateur satellite communication
+   * many others...
 
  ## Manual
 
-Up to date manual is available in the [Wiki section](https://github.com/egzumer/uv-k5-firmware-custom/wiki)
+Up to date manual is available in the [DTrac website](https://www.dtrac.cn)
 
 ## Radio performance
 
@@ -193,29 +193,6 @@ If you have docker installed you can use [compile-with-docker.bat](./compile-wit
     ```
 
 I've left some notes in the win_make.bat file to maybe help with stuff.
-
-## Credits
-
-Many thanks to various people on Telegram for putting up with me during this effort and helping:
-
-* [OneOfEleven](https://github.com/OneOfEleven)
-* [DualTachyon](https://github.com/DualTachyon)
-* [Mikhail](https://github.com/fagci)
-* [Andrej](https://github.com/Tunas1337)
-* [Manuel](https://github.com/manujedi)
-* @wagner
-* @Lohtse Shar
-* [@Matoz](https://github.com/spm81)
-* @Davide
-* @Ismo OH2FTG
-* [OneOfEleven](https://github.com/OneOfEleven)
-* @d1ced95
-* and others I forget
-
-## Other sources of information
-
-[ludwich66 - Quansheng UV-K5 Wiki](https://github.com/ludwich66/Quansheng_UV-K5_Wiki/wiki)<br>
-[amnemonic - tools and sources of information](https://github.com/amnemonic/Quansheng_UV-K5_Firmware)
 
 ## License
 
