@@ -55,6 +55,18 @@ typedef struct {
 	uint16_t ID;
 } Footer_t;
 
+// for DTrac app downFreq
+typedef struct {
+	Header_t Header;
+	uint32_t DownFrequency;
+} CMD_8888_t;
+
+// for DTrac app upFreq
+typedef struct {
+	Header_t Header;
+	uint32_t UpFrequency;
+} CMD_7777_t;
+
 typedef struct {
 	Header_t Header;
 	uint32_t Timestamp;
@@ -226,6 +238,23 @@ static bool IsBadChallenge(const uint32_t *pKey, const uint32_t *pIn, const uint
 			return true;
 
 	return false;
+}
+// for DTrac app downFreq
+static void CMD_8888(const uint8_t *pBuffer)
+{
+	const CMD_8888_t *pCmd = (const CMD_8888_t *)pBuffer;
+	uint32_t downFrequency = pCmd->DownFrequency/10;
+	gRxVfo->pRX->Frequency      = downFrequency ;
+	gUpdateDisplay = true;
+}
+
+// for DTrac app upFreq
+static void CMD_7777(const uint8_t *pBuffer)
+{
+	const CMD_7777_t *pCmd = (const CMD_7777_t *)pBuffer;
+	uint32_t upFrequency = pCmd->UpFrequency;
+	gRxVfo->pTX->Frequency      = upFrequency/10;
+	gUpdateDisplay = true;
 }
 
 // session init, sends back version info and state
@@ -567,8 +596,20 @@ bool UART_IsCommandAvailable(void)
 
 void UART_HandleCommand(void)
 {
+	//gRxVfo->pRX->Frequency      = 14500000;
+	//gRxVfo->pTX->Frequency      = 43500000;
+	//gUpdateDisplay = true;
+
 	switch (UART_Command.Header.ID)
 	{
+		case 0x8888:
+			CMD_8888(UART_Command.Buffer);
+			break;
+
+		case 0x7777:
+			CMD_7777(UART_Command.Buffer);
+			break;
+			
 		case 0x0514:
 			CMD_0514(UART_Command.Buffer);
 			break;
