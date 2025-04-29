@@ -6,6 +6,7 @@ All is a cloned and customized version of DualTachyon's open firmware found [her
 
 > [!TIP]
 > There is a work done by others on forks of this repository. I encourage you to take a look at those too. [SEE HERE](https://github.com/egzumer/uv-k5-firmware-custom/discussions/485)
+> 
 > 增加DTrac APP对UV-K5/K6多普勒频率同步的支持
 
 > [!WARNING]  
