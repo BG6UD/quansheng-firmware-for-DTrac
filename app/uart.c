@@ -58,6 +58,7 @@ typedef struct {
 // for DTrac app downFreq
 typedef struct {
 	Header_t Header;
+	//char DownMode;
 	uint32_t DownFrequency;
 } CMD_8888_t;
 
@@ -243,7 +244,9 @@ static bool IsBadChallenge(const uint32_t *pKey, const uint32_t *pIn, const uint
 static void CMD_8888(const uint8_t *pBuffer)
 {
 	const CMD_8888_t *pCmd = (const CMD_8888_t *)pBuffer;
+	//char downMode = pCmd->DownMode;
 	uint32_t downFrequency = pCmd->DownFrequency/10;
+	//gRxVfo->Modulation			= downMode;
 	gRxVfo->pRX->Frequency      = downFrequency ;
 	gUpdateDisplay = true;
 }
