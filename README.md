@@ -6,6 +6,8 @@ All is a cloned and customized version of DualTachyon's open firmware found [her
 
 > [!TIP]
 > There is a work done by others on forks of this repository. I encourage you to take a look at those too. [SEE HERE](https://github.com/egzumer/uv-k5-firmware-custom/discussions/485)
+> 
+> 增加DTrac APP对UV-K5/K6多普勒频率同步的支持
 
 > [!WARNING]  
 > Use this firmware at your own risk (entirely). There is absolutely no guarantee that it will work in any way shape or form on your radio(s), it may even brick your radio(s), in which case, you'd need to buy another radio.
@@ -212,4 +214,10 @@ You may obtain a copy of the License at
     limitations under the License.
 
 ## Example changes/updates
+
+![dtrac_quansheng_01](https://github.com/user-attachments/assets/0c497f1f-0914-4ee5-b3d2-d59bfd7b4cd0)
+
+![MuMu12-20250430-105619](https://github.com/user-attachments/assets/18904231-99e9-454a-82d6-2f6d37d63804)
+
+https://github.com/user-attachments/assets/061e2067-ca17-4b7f-baea-87a125b2697a
 
