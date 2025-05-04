@@ -55,6 +55,12 @@ typedef struct {
 	uint16_t ID;
 } Footer_t;
 
+// for DTrac app CTCSS_CODE
+typedef struct {
+	Header_t Header;
+	uint8_t CTCSS_CODE;
+} CMD_9999_t;
+
 // for DTrac app downFreq
 typedef struct {
 	Header_t Header;
@@ -244,6 +250,21 @@ static bool IsBadChallenge(const uint32_t *pKey, const uint32_t *pIn, const uint
 			return true;
 
 	return false;
+}
+
+// for DTrac app CTCSS
+static void CMD_9999(const uint8_t *pBuffer)
+{
+	const CMD_9999_t *pCmd = (const CMD_9999_t *)pBuffer;
+	uint8_t ctcssCode = pCmd->CTCSS_CODE;
+	if(ctcssCode < 99){
+		gRxVfo->pTX->CodeType = CODE_TYPE_CONTINUOUS_TONE;//CODE_TYPE_OFF
+		gRxVfo->pTX->Code = ctcssCode;
+	}else{
+		gRxVfo->pTX->CodeType = CODE_TYPE_OFF;
+	}
+	
+	gUpdateDisplay = true;
 }
 
 // for DTrac app downFreq
@@ -648,6 +669,10 @@ void UART_HandleCommand(void)
 
 	switch (UART_Command.Header.ID)
 	{
+		case 0x9999:
+			CMD_9999(UART_Command.Buffer);
+			break;
+
 		case 0x8888:
 			CMD_8888(UART_Command.Buffer);
 			break;
