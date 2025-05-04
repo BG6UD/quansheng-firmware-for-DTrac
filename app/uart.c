@@ -58,7 +58,6 @@ typedef struct {
 // for DTrac app downFreq
 typedef struct {
 	Header_t Header;
-	//char DownMode;
 	uint32_t DownFrequency;
 } CMD_8888_t;
 
@@ -67,6 +66,12 @@ typedef struct {
 	Header_t Header;
 	uint32_t UpFrequency;
 } CMD_7777_t;
+
+// for DTrac app mode
+typedef struct {
+	Header_t Header;
+	char Mode;
+} CMD_6666_t;
 
 typedef struct {
 	Header_t Header;
@@ -240,14 +245,29 @@ static bool IsBadChallenge(const uint32_t *pKey, const uint32_t *pIn, const uint
 
 	return false;
 }
+
 // for DTrac app downFreq
 static void CMD_8888(const uint8_t *pBuffer)
 {
 	const CMD_8888_t *pCmd = (const CMD_8888_t *)pBuffer;
-	//char downMode = pCmd->DownMode;
 	uint32_t downFrequency = pCmd->DownFrequency/10;
-	//gRxVfo->Modulation			= downMode;
 	gRxVfo->pRX->Frequency      = downFrequency ;
+
+	//char downMode = pCmd->DownMode;
+	// switch(pCmd->DownMode) {
+	// 	case 'F':
+	// 		gRxVfo->Modulation	= MODULATION_FM;
+	// 		break;
+	// 	case 'A':
+	// 		gRxVfo->Modulation	= MODULATION_AM;
+	// 		break;
+	// 	case 'U':
+	// 		gRxVfo->Modulation	= MODULATION_USB;
+	// 		break;
+	// 	default:
+	// 		gRxVfo->Modulation	= MODULATION_FM;
+	// 		break;	
+	// }
 	gUpdateDisplay = true;
 }
 
@@ -257,6 +277,29 @@ static void CMD_7777(const uint8_t *pBuffer)
 	const CMD_7777_t *pCmd = (const CMD_7777_t *)pBuffer;
 	uint32_t upFrequency = pCmd->UpFrequency;
 	gRxVfo->pTX->Frequency      = upFrequency/10;
+	//BK4819_SetCTCSSFrequency(670);
+	gUpdateDisplay = true;
+}
+
+// for DTrac app mode
+static void CMD_6666(const uint8_t *pBuffer)
+{
+	const CMD_6666_t *pCmd = (const CMD_6666_t *)pBuffer;
+	//char mode = pCmd->Mode;
+	switch(pCmd->Mode) {
+		case 'F':
+			gRxVfo->Modulation	= MODULATION_FM;
+			break;
+		case 'A':
+			gRxVfo->Modulation	= MODULATION_AM;
+			break;
+		case 'U':
+			gRxVfo->Modulation	= MODULATION_USB;
+			break;
+		default:
+			gRxVfo->Modulation	= MODULATION_FM;
+			break;	
+	}
 	gUpdateDisplay = true;
 }
 
@@ -612,7 +655,11 @@ void UART_HandleCommand(void)
 		case 0x7777:
 			CMD_7777(UART_Command.Buffer);
 			break;
-			
+
+		case 0x6666:
+			CMD_6666(UART_Command.Buffer);
+			break;	
+
 		case 0x0514:
 			CMD_0514(UART_Command.Buffer);
 			break;
