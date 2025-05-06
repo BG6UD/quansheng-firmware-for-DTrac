@@ -265,6 +265,7 @@ static void CMD_9999(const uint8_t *pBuffer)
 	}
 	
 	gUpdateDisplay = true;
+	//gUpdateStatus = true;
 }
 
 // for DTrac app downFreq
@@ -273,23 +274,11 @@ static void CMD_8888(const uint8_t *pBuffer)
 	const CMD_8888_t *pCmd = (const CMD_8888_t *)pBuffer;
 	uint32_t downFrequency = pCmd->DownFrequency/10;
 	gRxVfo->pRX->Frequency      = downFrequency ;
-
-	//char downMode = pCmd->DownMode;
-	// switch(pCmd->DownMode) {
-	// 	case 'F':
-	// 		gRxVfo->Modulation	= MODULATION_FM;
-	// 		break;
-	// 	case 'A':
-	// 		gRxVfo->Modulation	= MODULATION_AM;
-	// 		break;
-	// 	case 'U':
-	// 		gRxVfo->Modulation	= MODULATION_USB;
-	// 		break;
-	// 	default:
-	// 		gRxVfo->Modulation	= MODULATION_FM;
-	// 		break;	
-	// }
+	BK4819_SetFrequency(downFrequency);
+	//Frequency = downFrequency;
+	//g_SquelchLost = true;
 	gUpdateDisplay = true;
+	//gUpdateStatus = true;
 }
 
 // for DTrac app upFreq
@@ -300,6 +289,7 @@ static void CMD_7777(const uint8_t *pBuffer)
 	gRxVfo->pTX->Frequency      = upFrequency/10;
 	//BK4819_SetCTCSSFrequency(670);
 	gUpdateDisplay = true;
+	//gUpdateStatus = true;
 }
 
 // for DTrac app mode
@@ -322,6 +312,7 @@ static void CMD_6666(const uint8_t *pBuffer)
 			break;	
 	}
 	gUpdateDisplay = true;
+	//gUpdateStatus = true;
 }
 
 // session init, sends back version info and state
