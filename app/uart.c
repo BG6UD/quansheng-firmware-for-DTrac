@@ -257,39 +257,45 @@ static void CMD_9999(const uint8_t *pBuffer)
 {
 	const CMD_9999_t *pCmd = (const CMD_9999_t *)pBuffer;
 	uint8_t ctcssCode = pCmd->CTCSS_CODE;
-	if(ctcssCode < 99){
-		gRxVfo->pTX->CodeType = CODE_TYPE_CONTINUOUS_TONE;//CODE_TYPE_OFF
-		gRxVfo->pTX->Code = ctcssCode;
-	}else{
-		gRxVfo->pTX->CodeType = CODE_TYPE_OFF;
+	if(gRxVfo->pTX->Code != ctcssCode){
+		if(ctcssCode < 99){
+			gRxVfo->pTX->CodeType = CODE_TYPE_CONTINUOUS_TONE;//CODE_TYPE_OFF
+			gRxVfo->pTX->Code = ctcssCode;
+		}else{
+			gRxVfo->pTX->CodeType = CODE_TYPE_OFF;
+		}
+		BK4819_SetCTCSSFrequency(CTCSS_Options[ctcssCode]);
 	}
-	
-	gUpdateDisplay = true;
-	//gUpdateStatus = true;
 }
 
 // for DTrac app downFreq
 static void CMD_8888(const uint8_t *pBuffer)
 {
+	//BACKLIGHT_TurnOn();  
+	RADIO_SetupRegisters(true);
 	const CMD_8888_t *pCmd = (const CMD_8888_t *)pBuffer;
 	uint32_t downFrequency = pCmd->DownFrequency/10;
-	gRxVfo->pRX->Frequency      = downFrequency ;
-	BK4819_SetFrequency(downFrequency);
-	//Frequency = downFrequency;
-	//g_SquelchLost = true;
-	gUpdateDisplay = true;
-	//gUpdateStatus = true;
+	if(gRxVfo->pRX->Frequency != downFrequency){
+		gRxVfo->pRX->Frequency = downFrequency ;
+		if(FUNCTION_IsRx()){
+			BK4819_SetFrequency(downFrequency);
+			gUpdateDisplay = true;
+		}
+	}
 }
 
 // for DTrac app upFreq
 static void CMD_7777(const uint8_t *pBuffer)
 {
 	const CMD_7777_t *pCmd = (const CMD_7777_t *)pBuffer;
-	uint32_t upFrequency = pCmd->UpFrequency;
-	gRxVfo->pTX->Frequency      = upFrequency/10;
-	//BK4819_SetCTCSSFrequency(670);
-	gUpdateDisplay = true;
-	//gUpdateStatus = true;
+	uint32_t upFrequency = pCmd->UpFrequency/10;
+	if(gRxVfo->pTX->Frequency != upFrequency){
+		gRxVfo->pTX->Frequency = upFrequency;
+		if(!FUNCTION_IsRx()){
+			BK4819_SetFrequency(upFrequency);
+			gUpdateDisplay = true;
+		}
+	}
 }
 
 // for DTrac app mode
@@ -297,22 +303,35 @@ static void CMD_6666(const uint8_t *pBuffer)
 {
 	const CMD_6666_t *pCmd = (const CMD_6666_t *)pBuffer;
 	//char mode = pCmd->Mode;
+	uint8_t mode;
 	switch(pCmd->Mode) {
 		case 'F':
-			gRxVfo->Modulation	= MODULATION_FM;
+			mode = MODULATION_FM;
 			break;
 		case 'A':
-			gRxVfo->Modulation	= MODULATION_AM;
+			mode = MODULATION_AM;
 			break;
 		case 'U':
-			gRxVfo->Modulation	= MODULATION_USB;
+			mode = MODULATION_USB;
 			break;
+	#ifdef ENABLE_BYP_RAW_DEMODULATORS		
+		case 'B':
+			mode = MODULATION_BYP;
+			break;
+		case 'R':
+			mode = MODULATION_RAW;
+			break;	
+	#endif		
 		default:
-			gRxVfo->Modulation	= MODULATION_FM;
+			mode = MODULATION_FM;
 			break;	
 	}
+	if(gRxVfo->Modulation != mode){
+		gRxVfo->Modulation = mode;
+		RADIO_SetModulation(mode);
+	}
+	
 	gUpdateDisplay = true;
-	//gUpdateStatus = true;
 }
 
 // session init, sends back version info and state
