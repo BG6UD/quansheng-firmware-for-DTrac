@@ -23,6 +23,7 @@
 	#include "app/fm.h"
 #endif
 #include "app/uart.h"
+#include "app/app.h"
 #include "board.h"
 #include "bsp/dp32g030/dma.h"
 #include "bsp/dp32g030/gpio.h"
@@ -78,6 +79,12 @@ typedef struct {
 	Header_t Header;
 	char Mode;
 } CMD_6666_t;
+
+// for DTrac app MonitorStatus
+typedef struct {
+	Header_t Header;
+	char MonitorStatus;
+} CMD_5555_t;
 
 typedef struct {
 	Header_t Header;
@@ -272,7 +279,6 @@ static void CMD_9999(const uint8_t *pBuffer)
 static void CMD_8888(const uint8_t *pBuffer)
 {
 	//BACKLIGHT_TurnOn();  
-	RADIO_SetupRegisters(true);
 	const CMD_8888_t *pCmd = (const CMD_8888_t *)pBuffer;
 	uint32_t downFrequency = pCmd->DownFrequency/10;
 	if(gRxVfo->pRX->Frequency != downFrequency){
@@ -332,6 +338,26 @@ static void CMD_6666(const uint8_t *pBuffer)
 	}
 	
 	gUpdateDisplay = true;
+}
+
+// for DTrac app MONITOR
+char lastMonitorStatus = 'U';
+static void CMD_5555(const uint8_t *pBuffer)
+{
+	const CMD_5555_t *pCmd = (const CMD_5555_t *)pBuffer;
+	
+	if(lastMonitorStatus != pCmd->MonitorStatus){
+		switch(pCmd->MonitorStatus) {
+			case 'Y':
+				RADIO_SetupRegisters(true);
+				APP_StartListening(FUNCTION_MONITOR);
+				break;
+			case 'N':
+				RADIO_SetupRegisters(true);
+				APP_StartListening(FUNCTION_RECEIVE);
+		}	
+		lastMonitorStatus = pCmd->MonitorStatus;
+	}
 }
 
 // session init, sends back version info and state
@@ -693,6 +719,10 @@ void UART_HandleCommand(void)
 
 		case 0x6666:
 			CMD_6666(UART_Command.Buffer);
+			break;	
+
+		case 0x5555:
+			CMD_5555(UART_Command.Buffer);
 			break;	
 
 		case 0x0514:
