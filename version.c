@@ -1,8 +1,8 @@
 
 #ifdef VERSION_STRING
-	#define VER     " Radio 0.0.79"
+	#define VER     " Radio 0.0.7"
 #else
-	#define VER     " Radio 0.0.79"
+	#define VER     " Radio 0.0.7"
 #endif
 
 const char Version[]      = AUTHOR_STRING VER;
