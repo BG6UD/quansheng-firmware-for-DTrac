@@ -264,12 +264,12 @@ static void CMD_9999(const uint8_t *pBuffer)
 {
 	const CMD_9999_t *pCmd = (const CMD_9999_t *)pBuffer;
 	uint8_t ctcssCode = pCmd->CTCSS_CODE;
-	if(gRxVfo->pTX->Code != ctcssCode){
+	if(gTxVfo->pTX->Code != ctcssCode){
 		if(ctcssCode < 99){
-			gRxVfo->pTX->CodeType = CODE_TYPE_CONTINUOUS_TONE;//CODE_TYPE_OFF
-			gRxVfo->pTX->Code = ctcssCode;
+			gTxVfo->pTX->CodeType = CODE_TYPE_CONTINUOUS_TONE;
+			gTxVfo->pTX->Code = ctcssCode;
 		}else{
-			gRxVfo->pTX->CodeType = CODE_TYPE_OFF;
+			gTxVfo->pTX->CodeType = CODE_TYPE_OFF;
 		}
 		BK4819_SetCTCSSFrequency(CTCSS_Options[ctcssCode]);
 	}
