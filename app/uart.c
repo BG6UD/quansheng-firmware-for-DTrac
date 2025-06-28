@@ -259,7 +259,7 @@ static bool IsBadChallenge(const uint32_t *pKey, const uint32_t *pIn, const uint
 	return false;
 }
 
-// for DTrac app CTCSS
+// for DTrac app TX CTCSS
 static void CMD_9999(const uint8_t *pBuffer)
 {
 	const CMD_9999_t *pCmd = (const CMD_9999_t *)pBuffer;
@@ -269,6 +269,7 @@ static void CMD_9999(const uint8_t *pBuffer)
 			gTxVfo->pTX->CodeType = CODE_TYPE_CONTINUOUS_TONE;
 			gTxVfo->pTX->Code = ctcssCode;
 		}else{
+			gTxVfo->pTX->Code = 99;//修复亚音偶发失步的故障
 			gTxVfo->pTX->CodeType = CODE_TYPE_OFF;
 		}
 		BK4819_SetCTCSSFrequency(CTCSS_Options[ctcssCode]);
@@ -699,26 +700,22 @@ bool UART_IsCommandAvailable(void)
 
 void UART_HandleCommand(void)
 {
-	//gRxVfo->pRX->Frequency      = 14500000;
-	//gRxVfo->pTX->Frequency      = 43500000;
-	//gUpdateDisplay = true;
-
 	switch (UART_Command.Header.ID)
 	{
 		case 0x9999:
-			CMD_9999(UART_Command.Buffer);
+			CMD_9999(UART_Command.Buffer);// for DTrac app TX CTCSS
 			break;
 
 		case 0x8888:
-			CMD_8888(UART_Command.Buffer);
+			CMD_8888(UART_Command.Buffer);// for DTrac app downFreq
 			break;
 
 		case 0x7777:
-			CMD_7777(UART_Command.Buffer);
+			CMD_7777(UART_Command.Buffer);// for DTrac app upFreq
 			break;
 
 		case 0x6666:
-			CMD_6666(UART_Command.Buffer);
+			CMD_6666(UART_Command.Buffer);// for DTrac app mode
 			break;	
 
 		case 0x5555:
